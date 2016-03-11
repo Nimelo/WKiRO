@@ -1,4 +1,3 @@
-
 mult <- function(x, y) {
     x * y
 }
@@ -14,8 +13,17 @@ readFile <- function(name) {
 
         infoHeader <- BitmapInfoHeader$new()
         infoHeader$load(toread)
-        infoHeader$printLn()       
-       # return(readBin(toread, integer(), size = 1, finfo$size, endian = "little"))
+        infoHeader$printLn()
+
+        if (infoHeader$bitCount <= 8) {
+            print(infoHeader$calculatePixelArraySize())
+        }
+
+        pixel <- Pixel$new()
+        pixel$load(toread)
+        pixel$printLn()
+
+        #return(readBin(toread, integer(), size = 1, finfo$size, endian = "little"))
     }
 }
 
@@ -23,20 +31,20 @@ readFile <- function(name) {
 BitmapFileHeader <- setRefClass("BitmapFileHeader",
     fields = list(type = "character", size = "integer", rsv1 = "integer", rsv2 = "integer", offsetBits = "integer"),
     methods = list(
-        load = function(toread) {     
-            type <<- readChar(toread, 2, useBytes = TRUE)
-            size <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-            rsv1 <<- readBin(toread, integer(), size = 2, 1, endian = "little", signed = FALSE)
-            rsv2 <<- readBin(toread, integer(), size = 2, 1, endian = "little", signed = FALSE)
-            offsetBits <<- readBin(toread, integer(), size = 4, 1, endian = "little")
+        load = function(toread) {
+    type <<- readChar(toread, 2, useBytes = TRUE)
+    size <<- read4BytesInteger(toread)
+    rsv1 <<- read2BytesInteger(toread)
+    rsv2 <<- read2BytesInteger(toread)
+    offsetBits <<- read4BytesInteger(toread)
 },
         printLn = function() {
-            print("BitmapFileHeader")
-            printWithInfo("Type: ",type)
-            printWithInfo("Size: ",size)
-            printWithInfo("Rsv1: ",rsv1)
-            printWithInfo("Rsv2: ",rsv2)
-            printWithInfo("OffsetBits: ",offsetBits)
+    print("BitmapFileHeader")
+    printWithInfo("Type: ", type)
+    printWithInfo("Size: ", size)
+    printWithInfo("Rsv1: ", rsv1)
+    printWithInfo("Rsv2: ", rsv2)
+    printWithInfo("OffsetBits: ", offsetBits)
 }))
 
 
@@ -48,18 +56,24 @@ BitmapInfoHeader <- setRefClass("BitmapInfoHeader",
                     colorsUsed = "integer", colorsImportant = "integer"),
     methods = list(
         load = function(toread) {
-    size <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    width <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    height <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    planes <<- readBin(toread, integer(), size = 2, 1, endian = "little", signed = FALSE)
-    bitCount <<- readBin(toread, integer(), size = 2, 1, endian = "little", signed = FALSE)
-    compression <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    sizeImage <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    xPelsPermeter <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    yPelsPermeter <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    colorsUsed <<- readBin(toread, integer(), size = 4, 1, endian = "little")
-    colorsImportant <<- readBin(toread, integer(), size = 4, 1, endian = "little")
+    size <<- read4BytesInteger(toread)
+    width <<- read4BytesInteger(toread)
+    height <<- read4BytesInteger(toread)
+    planes <<- read2BytesInteger(toread)
+    bitCount <<- read2BytesInteger(toread)
+    compression <<- read4BytesInteger(toread)
+    sizeImage <<- read4BytesInteger(toread)
+    xPelsPermeter <<- read4BytesInteger(toread)
+    yPelsPermeter <<- read4BytesInteger(toread)
+    colorsUsed <<- read4BytesInteger(toread)
+    colorsImportant <<- read4BytesInteger(toread)
 },
+        calculateRowSize = function() {
+            return(floor((bitCount * width + 31) / 32) * 4)
+},
+        calculatePixelArraySize = function() {
+            return(calculateRowSize() * abs(height))
+        },
         printLn = function() {
     print("BitmapInfoHeader")
     printWithInfo("Size: ", size)
@@ -78,33 +92,47 @@ printWithInfo = function(info, value) {
     print(paste(info, value))
 }
 
+read4BytesInteger = function(toread) {
+    return(readBin(toread, integer(), size = 4, 1, endian = "little"))
+}
+
+read2BytesInteger = function(toread) {
+    return(readBin(toread, integer(), size = 2, 1, endian = "little", signed = FALSE))
+}
+
+
 #class Win3ColorTable
 Win3ColorTable <- setRefClass("Win3ColorTable",
     fields = list(b = "integer", g = "integer", r = "integer", rsv = "integer"),
     methods = list(
         load = function(toread) {
-            r <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
-            g <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
-            b <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
-            rsv <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    r <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    g <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    b <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    rsv <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
 },
         printLn = function() {
-             print("Win3ColorTable")
-             print(b)
-             print(g)
-             print(r)
-             print(rsv)
+    print("Win3ColorTable")
+    print(b)
+    print(g)
+    print(r)
+    print(rsv)
 }))
 
-ColorTable <- setRefClass("ColorTable",
-    fields = list(amount = "list"),
+#rgb
+Pixel <- setRefClass("Pixel",
+    fields = list(b = "integer", g = "integer", r = "integer"),
     methods = list(
-        load = function(toread, size) {
-        
+        load = function(toread) {
+    r <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    g <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
+    b <<- readBin(toread, integer(), size = 1, 1, endian = "little", signed = FALSE)
 },
         printLn = function() {
-    print("ColorTable")
-
+    print("Pixel")
+    print(r)
+    print(g)
+    print(b)
 }))
 
 
@@ -114,7 +142,10 @@ setwd(this.dir)
 #source("ReadWrite.R")
 
 #print(mult(4, 2))
-
-readFile("Untitled.bmp")
+readFile("16rgb4x1.bmp")
 print('')
-readFile("24bitYELLOW.bmp")
+#readFile("Untitled.bmp")
+print('')
+#readFile("24bitYELLOW.bmp")
+print('')
+#readFile("24bit15_255_6.bmp")
