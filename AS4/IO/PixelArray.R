@@ -6,9 +6,9 @@ PixelArray <- setRefClass("PixelArray",
 	fields = list(b = "matrix", g = "matrix", r = "matrix"),
 	methods = list(
 		set = function(v, width, height) {
-			r <<- matrix(v[seq(1, length(v), 3)], nrow = height, ncol = width)
-			g <<- matrix(v[seq(2, length(v), 3)], nrow = height, ncol = width)
-			b <<- matrix(v[seq(3, length(v), 3)], nrow = height, ncol = width)
+			r <<- matrix(v[seq(1, length(v), 3)], nrow = height, ncol = width, byrow = TRUE)
+			g <<- matrix(v[seq(2, length(v), 3)], nrow = height, ncol = width, byrow = TRUE)
+			b <<- matrix(v[seq(3, length(v), 3)], nrow = height, ncol = width, byrow = TRUE)
 		},
 		write = function(conn) {
 			for (i in 1:nrow(r)) {

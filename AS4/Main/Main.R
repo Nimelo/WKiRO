@@ -1,8 +1,8 @@
 # dependencies
 source(paste0(getwd(), "/IO/Bitmap.R"))
-
-filePath <- paste0(getwd(), "/Files/Input/24bit15_255_6.bmp")
-savePath <- paste0(getwd(), "/Files/Output/24bit15_255_6.bmp")
+source(paste0(getwd(), "/Algorithms/Negative.R"))
+filePath <- paste0(getwd(), "/Files/Input/spidey.bmp")
+savePath <- paste0(getwd(), "/Files/Output/spidey.bmp")
 bitmap <- Bitmap$new()
 x <- bitmap$readBitmap(filePath)
 #bitmap$printMe()
@@ -10,6 +10,8 @@ x <- bitmap$readBitmap(filePath)
 b <- bitmap$pixelMatrix$b
 g <- bitmap$pixelMatrix$g
 r <- bitmap$pixelMatrix$r
+
+negative(bitmap)
 
 bitmap$saveBitmap(savePath)
 
