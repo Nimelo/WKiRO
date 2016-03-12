@@ -9,18 +9,16 @@ library("bmp")
 library("pixmap")
 library("readbitmap")
 
-iter <- 12
-try(if (iter > 10) stop("too many iterations"))
 
-simpleError("ERROR", call = TRUE)
+#is.bmp("16rgb4x1.bmp")
+r <- read.bmp(paste0(getwd(), "/Files/Input/24bit15_255_6.bmp"), Verbose = TRUE)
 
-is.bmp("16rgb4x1.bmp")
-r <- read.bmp("16rgb4x1.bmp")
-throw("Division by zero.")
 pr <- pixmapRGB(r)
 
 red = pr@red
 green = pr@green
 blue = pr@blue
 
-macierz <- matrix(c(0, 1, 2, 3), nrow = 2, ncol = 2)
+a <- 1:120
+b <- a[seq(1, length(a), 6)]
+c <- a[seq(2, length(a), 6)]

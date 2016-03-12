@@ -1,0 +1,17 @@
+{
+    "contents" : "# Bitmap\nsource(paste0(getwd(), \"/IO/BitmapInfoHeader.R\"))\nsource(paste0(getwd(), \"/IO/BitmapFileHeader.R\"))\nsource(paste0(getwd(), \"/IO/PixelArray.R\"))\n\nBitmap <- setRefClass(\"Bitmap\",\nfields = list(infoHeader = \"BitmapInfoHeader\", fileHeader = \"BitmapFileHeader\", pixelMatrix = \"PixelArray\"),\nmethods = list(\n\tload = function(toread) {\n\t#  type <<- readChar(toread, 2, useBytes = TRUE)\n\t#  size <<- read4BytesInteger(toread)\n\t#  rsv1 <<- read2BytesInteger(toread)\n\t#  rsv2 <<- read2BytesInteger(toread)\n\t#  offsetBits <<- read4BytesInteger(toread)\n},\n\treadBitmap = function(filePath) {\n\tif (file.exists(filePath)) {\n\t\tfinfo = file.info(filePath)\n\t\ttoread = file(filePath, \"rb\")\n\t\t\n\t\tfileHeader <<- BitmapFileHeader$new()\n\t\tfileHeader$load(toread)\n\n\t\tinfoHeader <<- BitmapInfoHeader$new()\n\t\tinfoHeader$load(toread)\n\t\t\n\t\tif (infoHeader$bitCount <= 8) {\n\t\t\tstop(\"Cannot open file.\")\n\t\t}\n\n\t\tpixelMatrix <<- PixelArray$new()\n\n\t\tpixelMatrix$read(toread, infoHeader$width, infoHeader$height)\n\t\t\n\t\tunlink(toread)\n\t} else {\n\t\tstop(\"File not exist\")\n\t}\n},\nsaveBitmap = function(filePath) {\n\n},\n\tprint = function() {\n\tinfoHeader$printLn();\n\tfileHeader$printLn();\n}))\n",
+    "created" : 1457794472638.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2808666873",
+    "id" : "29E880A6",
+    "lastKnownWriteTime" : 1457798429,
+    "path" : "E:/GitHubRepo/WKiRO/AS4/IO/Bitmap.R",
+    "project_path" : "IO/Bitmap.R",
+    "properties" : {
+    },
+    "relative_order" : 1,
+    "source_on_save" : false,
+    "type" : "r_source"
+}

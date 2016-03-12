@@ -1,51 +1,49 @@
 # Bitmap
 source(paste0(getwd(), "/IO/BitmapInfoHeader.R"))
 source(paste0(getwd(), "/IO/BitmapFileHeader.R"))
+source(paste0(getwd(), "/IO/PixelArray.R"))
 
 Bitmap <- setRefClass("Bitmap",
-fields = list(infoHeader = "BitmapInfoHeader", fileHeader = "BitmapFileHeader", pixelMatrix = "matrix"),
+fields = list(infoHeader = "BitmapInfoHeader", fileHeader = "BitmapFileHeader", pixelMatrix = "PixelArray"),
 methods = list(
-	load = function(toread) {
-	#  type <<- readChar(toread, 2, useBytes = TRUE)
-	#  size <<- read4BytesInteger(toread)
-	#  rsv1 <<- read2BytesInteger(toread)
-	#  rsv2 <<- read2BytesInteger(toread)
-	#  offsetBits <<- read4BytesInteger(toread)
-},
 	readBitmap = function(filePath) {
-	if (file.exists(filePath)) {
-		finfo = file.info(filePath)
-		toread = file(filePath, "rb")
+		if (file.exists(filePath)) {
+			finfo = file.info(filePath)
+			toread = file(filePath, "rb")
+		
+			fileHeader <<- BitmapFileHeader$new()
+			fileHeader$load(toread)
+		
+			infoHeader <<- BitmapInfoHeader$new()
+			infoHeader$load(toread)
 
-		fileHeader <<- BitmapFileHeader$new()
-		fileHeader$load(toread)
-		fileHeader$printLn()
+			chunk = fileHeader$size - fileHeader$offsetBits;
 
-		infoHeader <<- BitmapInfoHeader$new()
-		infoHeader$load(toread)
-		infoHeader$printLn()
+			if (infoHeader$bitCount <= 8) {
+				stop("Cannot open file.")
+			}
 
-		if (infoHeader$bitCount <= 8) {
-			stop("Cannot open file.")
+			rawPixels = readBin(toread, integer(), size = 1, n = chunk, endian = "little", signed = FALSE);
+			pixelMatrix <<- PixelArray$new()
+		
+			pixelMatrix$set(rawPixels, infoHeader$width, infoHeader$height)
+
+			close(toread)
+		} else {
+			stop("File not exist")
 		}
-	} else {
-		stop("File not exist")
+	},
+	saveBitmap = function(filePath) {
+		fileConn <- file(filePath, open = "wb", raw = TRUE)
+
+		fileHeader$write(fileConn)
+		infoHeader$write(fileConn)
+		pixelMatrix$write(fileConn)
+
+		close(fileConn)
+	},
+	printMe = function() {
+		infoHeader$printLn();
+		fileHeader$printLn();
 	}
-},
-saveBitmap = function(filePath) {
-
-},
-	print = function() {
-	infoHeader$printLn();
-	fileHeader$printLn();
-}))
-
-
-bitmap <- Bitmap$new()
-
-filePath <- paste0(getwd(), "/Files/Input/24bitYELLOW.bmp")
-
-bitmap$readBitmap(filePath)
-
-
-bitmap$print()
+))
