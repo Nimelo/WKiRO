@@ -19,9 +19,15 @@ readFile <- function(name) {
             print(infoHeader$calculatePixelArraySize())
         }
 
-        pixel <- Pixel$new()
-        pixel$load(toread)
-        pixel$printLn()
+        for (i in 1:20) {
+            pixel <- Win3ColorTable$new()
+            pixel$load(toread)
+            pixel$printLn()
+        }
+
+        #pixel <- Pixel$new()
+        #pixel$load(toread)
+        #pixel$printLn()
 
         #return(readBin(toread, integer(), size = 1, finfo$size, endian = "little"))
     }
@@ -146,6 +152,6 @@ readFile("16rgb4x1.bmp")
 print('')
 #readFile("Untitled.bmp")
 print('')
-#readFile("24bitYELLOW.bmp")
+readFile("24bitYELLOW.bmp")
 print('')
-#readFile("24bit15_255_6.bmp")
+readFile("24bit15_255_6.bmp")
