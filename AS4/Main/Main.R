@@ -1,6 +1,12 @@
 # dependencies
 source(paste0(getwd(), "/IO/Bitmap.R"))
-source(paste0(getwd(), "/Algorithms/Negative.R"))
+
+ctxLessAlgorithmsPath = "./Algorithms/Contextless Processing/"
+
+for (f in list.files(path = ctxLessAlgorithmsPath, pattern = "*.R")) {
+	source(paste0(ctxLessAlgorithmsPath, f))
+}
+
 filePath <- paste0(getwd(), "/Files/Input/spidey.bmp")
 savePath <- paste0(getwd(), "/Files/Output/spidey.bmp")
 bitmap <- Bitmap$new()
@@ -11,6 +17,8 @@ b <- bitmap$pixelMatrix$b
 g <- bitmap$pixelMatrix$g
 r <- bitmap$pixelMatrix$r
 
+
+greyScale(bitmap, 0.3, 0.6, 0.1)
 negative(bitmap)
 
 bitmap$saveBitmap(savePath)
