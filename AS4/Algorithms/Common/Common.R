@@ -34,11 +34,14 @@ calculateCoefficientMatrix <- function(origMatrix, coefficientMatrix, x, y){
 	xOffset = (nrow(coefficientMatrix) - 1) / 2
 	yOffset = (ncol(coefficientMatrix) - 1) / 2
 
+	xRealOffset = xOffset + 1 - x
+	yRealOffset = yOffset + 1 - y
+
 	for(i in (x - xOffset) : (x + xOffset)){
 		for(j in (y - yOffset) : (y + yOffset)){		
 			if (isInRange(i, max = matrixHeight) && isInRange(j, max = matrixWidth)) {
-				coeMSum = coeMSum + coefficientMatrix[i - x + xOffset + 1, j - y + yOffset + 1]
-				value = value + origMatrix[i, j] * coefficientMatrix[i - x + xOffset + 1, j - y + yOffset + 1]
+				coeMSum = coeMSum + coefficientMatrix[i + xRealOffset, j + yRealOffset]
+				value = value + origMatrix[i, j] * coefficientMatrix[i + xRealOffset, j + yRealOffset]
 			}
 		}
 	}
