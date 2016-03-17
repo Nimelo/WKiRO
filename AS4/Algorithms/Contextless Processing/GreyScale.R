@@ -1,11 +1,8 @@
 source(paste0(getwd(), "/IO/Bitmap.R"))
 source(paste0(getwd(), "/Common/Common.R"))
+source(paste0(getwd(), "/Algorithms/Common/Common.R"))
 
 greyScale = function(bitmap, coR, coG, coB) {
-
-	if (round(coR + coG + coB) != 1) {
-		stop("Sum of cooficients should equal 1")
-	}
 
 	bitmap$pixelMatrix$r = apply(bitmap$pixelMatrix$r, c(1, 2), multiplyByCoefficient, coefficient = coR)
 	bitmap$pixelMatrix$g = apply(bitmap$pixelMatrix$g, c(1, 2), multiplyByCoefficient, coefficient = coG)
@@ -18,6 +15,6 @@ greyScale = function(bitmap, coR, coG, coB) {
 	bitmap$pixelMatrix$b = greyMatrix
 }
 
-multiplyByCoefficient <- function(value, coefficient, max = 255) {
-	tmpValue <- as.integer(round(value * coefficient))
+multiplyByCoefficient <- function(value, coefficient) {
+	tmpValue <- getFromRangeOrDefault(value = as.integer(round(value * coefficient)))
 }

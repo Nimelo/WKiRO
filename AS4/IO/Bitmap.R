@@ -45,5 +45,11 @@ methods = list(
 	printMe = function() {
 		infoHeader$printLn();
 		fileHeader$printLn();
+	},
+	getWidth = function(){
+		return(infoHeader$width)
+	},
+	getHeight = function(){
+		return(infoHeader$height)
 	}
 ))

@@ -13,11 +13,19 @@ bitmap <- Bitmap$new()
 x <- bitmap$readBitmap(filePath)
 #bitmap$printMe()
 
+b <- bitmap$pixelMatrix$b
+g <- bitmap$pixelMatrix$g
+r <- bitmap$pixelMatrix$r
 
+bitmapMultiply(bitmap, 0)
 #greyScale(bitmap, 0.3, 0.6, 0.1)
 #negative(bitmap)
-bitmapMatrix(bitmap, matrix(1, 3, 3))
+
 bitmap$saveBitmap(savePath)
+
+
+
+
 
 #Helpfull windows compare function
 #fc Input\24bit15_255_6.bmp Output\24bit15_255_6.bmp /B
