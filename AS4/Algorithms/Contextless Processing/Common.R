@@ -25,6 +25,12 @@ bitmapDivide <- function(bitmap, coR = 1, coG = 1, coB = 1) {
 	bitmap$pixelMatrix$b = apply(bitmap$pixelMatrix$b, c(1, 2), dividePixel, coefficient = coB)
 }
 
+bitmapPower <- function(bitmap, gamma) {
+	bitmap$pixelMatrix$r = apply(bitmap$pixelMatrix$r, c(1, 2), powerPixel, coefficient = gamma)
+	bitmap$pixelMatrix$g = apply(bitmap$pixelMatrix$g, c(1, 2), powerPixel, coefficient = gamma)
+	bitmap$pixelMatrix$b = apply(bitmap$pixelMatrix$b, c(1, 2), powerPixel, coefficient = gamma)
+}
+
 bitmapMatrix <- function(bitmap, mat){
 	r <- bitmap$pixelMatrix$r
 	g <- bitmap$pixelMatrix$g

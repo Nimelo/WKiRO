@@ -5,7 +5,7 @@ getFromRangeOrDefault <- function(value, min = 0, max = 255){
 	}else if(value > max){
 		return(as.integer(255))
 	}else{
-		return(value)
+		return(as.integer(value))
 	}	
 }
 
@@ -23,6 +23,10 @@ multiplyPixel <- function(value, coefficient) {
 
 dividePixel <- function(value, coefficient) {
 	return(as.integer(getFromRangeOrDefault(value = value / coefficient)))
+}
+
+powerPixel <- function(value, coefficient) {
+	return(as.integer(getFromRangeOrDefault(value = value ^ coefficient)))
 }
 
 calculateCoefficientMatrix <- function(origMatrix, coefficientMatrix, x, y){
@@ -44,7 +48,7 @@ calculateCoefficientMatrix <- function(origMatrix, coefficientMatrix, x, y){
 		for(j in (y - yOffset) : (y + yOffset)){		
 			if (isInRange(i, max = matrixHeight) && isInRange(j, max = matrixWidth)) {
 				coof = coefficientMatrix[i + xRealOffset, j + yRealOffset]
-				coeMSum = coeMSum + abs(coof)
+				coeMSum = coeMSum + coof
 				r = r + origMatrix$r[i, j] * coof
 				g = g + origMatrix$g[i, j] * coof
 				b = b + origMatrix$b[i, j] * coof
@@ -52,6 +56,10 @@ calculateCoefficientMatrix <- function(origMatrix, coefficientMatrix, x, y){
 		}
 	}
 	
+	if (coeMSum == 0) {
+		coeMSum = 1
+	}
+
 	return(c(getFromRangeOrDefault(as.integer(round(r / coeMSum))), getFromRangeOrDefault(as.integer(round(g / coeMSum))), getFromRangeOrDefault(as.integer(round(b / coeMSum)))))
 }
 
