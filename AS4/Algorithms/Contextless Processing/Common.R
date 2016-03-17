@@ -32,9 +32,10 @@ bitmapMatrix <- function(bitmap, mat){
 
 	for (i in 1:bitmap$getHeight()) {
 		for(j in 1:bitmap$getWidth()){
-			r[i,j] <- calculateCoefficientMatrix(bitmap$pixelMatrix$r, mat, i, j)
-			g[i,j] <- calculateCoefficientMatrix(bitmap$pixelMatrix$g, mat, i, j)
-			b[i,j] <- calculateCoefficientMatrix(bitmap$pixelMatrix$b, mat, i, j)
+			rgb = calculateCoefficientMatrix(bitmap$pixelMatrix, mat, i, j)
+			r[i,j] = rgb[1]
+			g[i,j] = rgb[2]
+			b[i,j] = rgb[3]
 		}
 	}
 
