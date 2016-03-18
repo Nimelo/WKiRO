@@ -1,12 +1,11 @@
-this.dir <- dirname(parent.frame(2)$ofile)
-setwd(this.dir)
+dyn.load("foo.dll")
 
-source("ReadWrite.R")
+x = 1:3
+ret_val = .C("addOneToVector", n = length(x), vector = as.double(x))
 
-#print(mult(4, 2))
+mat = matrix(1:9, 3, 3, TRUE)
 
-readFile("Untitled.bmp")
-
-#print(readFile("1.txt"))
+ret_val = .C("addOneToMatrix", x = nrow(mat), y = ncol(mat),  matrix = mat)
 
 
+print(ret_val$matrix)
