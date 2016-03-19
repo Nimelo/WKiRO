@@ -6,19 +6,24 @@
 int** getMatrixFromVector(int* vRows, int* vCols, int* vector);
 void deleteMatrix(int* rows, int** matrix);
 void bitmapMatrix(int* vRows, int* vCols, int* vector, int* maskRows, int* maskCols, int* mask);
-void transformMatrixToVector(int* mRows, int* mCols, int** matrix, int* vector);
 int calculateCoefficientMatrix(int* vRows, int* vCols, int** matrix, int* maskRows, int* maskCols, int** mask, int x, int y);
 int isInRange(int x, int max);
 
-int main(char* args[], int argc) {
-	
-	int vector[] = { 1,2,3,4,5,6,7,8,9};
-	int mask[] = { 1,1,1,1,1,1,1,1,1 };
+int main(int argc, char* args[]) {
 
-	int xy = 3;
+	int vector[100] = { 1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16};
+	int mask[] = {0,0,0,1,0,0,0,0,0 };
+
+	//int* vector = malloc(sizeof(int) * 100);
+
+	//double mask[] = { 1,1,1,1,1,1,1,1,1 };
+	int mask2[] = { -1,-1,-1,-1,9,-1,-1,-1,-1 };
+
+	int x = 4;
+	int y = 4;
 	int one = 3;
 
-	bitmapMatrix(&xy, &xy, vector, &one, &one, mask);
+	bitmapMatrix(&x, &y, vector, &one, &one, mask);
 
 }
 
@@ -29,36 +34,36 @@ void bitmapMatrix(int* vRows, int* vCols, int* vector, int* maskRows, int* maskC
 
 	for (int i = 0; i < *vRows; i++) {
 		for (int j = 0; j < *vCols; j++) {
-			matrix[i][j] = calculateCoefficientMatrix(vRows, vCols, matrix, maskRows, maskCols, maskMatrix, i, j);
+			vector[(i * *vCols) + j] = calculateCoefficientMatrix(vRows, vCols, matrix, maskRows, maskCols, maskMatrix, i, j);
 		}
 	}
 
-	transformMatrixToVector(vRows, vCols, matrix, vector);
 	deleteMatrix(vRows, matrix);
 	deleteMatrix(maskRows, maskMatrix);
 }
 
 int calculateCoefficientMatrix(int* vRows, int* vCols, int** matrix, int* maskRows, int* maskCols, int** mask, int x, int y) {
 	int coefficientSum = 0;
-	int value = 0;
+	double value = 0;
 
 	int xOffset = (*maskRows - 1) / 2;
 	int yOffset = (*maskCols - 1) / 2;
 
-	int xRealOffset = xOffset - x;
-	int yRealOffset = yOffset - y;
-
-	for (int i = (x - xOffset); i <= (x + xOffset); i++) {
-		for (int j = (y - yOffset); j <= (y + yOffset); j++) {
-			if (isInRange(i, *vRows) && isInRange(j, *vCols)) {
-				int coefficient = mask[i + xRealOffset][j + yRealOffset];
+	for (int i = -xOffset; i <= xOffset; i++) {
+		for (int j = -yOffset; j <= yOffset; j++) {			
+			if (isInRange(x - i, *vRows) && isInRange(y + j, *vCols)) {
+				int coefficient = mask[i + xOffset][j + yOffset];
 				coefficientSum += coefficient;
-				value += matrix[i][j] * coefficient;
+				value += matrix[x - i][y + j] * coefficient;
 			}
 		}
 	}
 
-	return  (int)round(value / (coefficientSum == 0 ? 1 : coefficientSum));
+	if (coefficientSum == 0) {
+		coefficientSum = 1;
+	}
+
+	return  normalize0_255((int)round((double)value / coefficientSum));
 }
 
 int isInRange(int x, int max) {
@@ -69,11 +74,15 @@ int isInRange(int x, int max) {
 	return 0;
 }
 
-void transformMatrixToVector(int* mRows, int* mCols, int** matrix, int* vector) {
-	for (int j = 0; j < *mRows; j++) {
-		for (int i = 0; i < *mCols; i++) {
-			*vector++ = matrix[j][i];
-		}
+int normalize0_255(int value) {
+	if (value > 255) {
+		return 255;
+	}
+	else if (value < 0) {
+		return 0;
+	}
+	else {
+		return value;
 	}
 
 }
@@ -87,9 +96,8 @@ int** getMatrixFromVector(int* vRows, int* vCols, int* vector) {
 		matrix[i] = malloc(*vCols * sizeof(int));
 	}
 
-
-	for (int j = 0; j < *vRows; j++) {
-		for (int i = 0; i < *vCols; i++) {
+	for (int i = 0; i < *vCols; i++) {
+		for (int j = 0; j < *vRows; j++) {		
 			matrix[j][i] = *vector++;
 		}
 	}
