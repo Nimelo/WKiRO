@@ -32,20 +32,17 @@ bitmapPower <- function(bitmap, gamma) {
 }
 
 bitmapMatrix <- function(bitmap, mat){
+	dyn.load(paste0(getwd(), "C/Main.dll"))
+
 	r <- bitmap$pixelMatrix$r
 	g <- bitmap$pixelMatrix$g
 	b <- bitmap$pixelMatrix$b
 
-	for (i in 1:bitmap$getHeight()) {
-		for(j in 1:bitmap$getWidth()){
-			rgb = calculateCoefficientMatrix(bitmap$pixelMatrix, mat, i, j)
-			r[i,j] = rgb[1]
-			g[i,j] = rgb[2]
-			b[i,j] = rgb[3]
-		}
-	}
-
-	bitmap$pixelMatrix$r <<- r
-	bitmap$pixelMatrix$g <<- g
-	bitmap$pixelMatrix$b <<- b
+	bitmap$pixelMatrix$r <<- .C("bitmapMatrix", vRows = nrow(r), vCols = ncol(r), vector = r, maskRows = nrow(mat), maskCols = ncol(mat), mask = as.integer(mat))$vector
+	bitmap$pixelMatrix$g <<- .C("bitmapMatrix", vRows = nrow(g), vCols = ncol(g), vector = g, maskRows = nrow(mat), maskCols = ncol(mat), mask = as.integer(mat))$vector
+	bitmap$pixelMatrix$b <<- .C("bitmapMatrix", vRows = nrow(b), vCols = ncol(b), vector = b, maskRows = nrow(mat), maskCols = ncol(mat), mask = as.integer(mat))$vector
+#
+#	bitmap$pixelMatrix$r <<- r
+	#bitmap$pixelMatrix$g <<- g
+	#bitmap$pixelMatrix$b <<- b
 }
