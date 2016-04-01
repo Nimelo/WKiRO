@@ -132,3 +132,53 @@ matrixPower <- function(mat, value) {
     mat <- mat ^ value;
     return(fixRange(mat))
 }
+
+# Squere roots channel R,G,B by specific value. then rounds between 0..1
+imgSqrt <- function(img) {
+
+    channels <- dim(img)[3]
+
+    if (isInDimensionRange(img, 1)) {
+        img[,, 1] <- matrixSqrt(img[,, 1])
+    }
+
+    if (isInDimensionRange(img, 2)) {
+        img[,, 2] <- matrixSqrt(img[,, 2])
+    }
+
+    if (isInDimensionRange(img, 3)) {
+        img[,, 3] <- matrixSqrt(img[,, 3])
+    }
+    return(img)
+}
+
+# Squere roots elements in matrix by specific values. Then rounds between 0..1
+matrixSqrt <- function(mat) {
+    mat <- sqrt(mat);
+    return(fixRange(mat))
+}
+
+# Logarithms channel R,G,B by specific value. then rounds between 0..1
+imgLog <- function(img, base) {
+
+    channels <- dim(img)[3]
+
+    if (isInDimensionRange(img, 1)) {
+        img[,, 1] <- matrixLog(img[,, 1], base)
+    }
+
+    if (isInDimensionRange(img, 2)) {
+        img[,, 2] <- matrixLog(img[,, 2], base)
+    }
+
+    if (isInDimensionRange(img, 3)) {
+        img[,, 3] <- matrixLog(img[,, 3], base)
+    }
+    return(img)
+}
+
+# Logarithms elements in matrix by specific values. Then rounds between 0..1
+matrixLog<- function(mat, value) {
+    mat <- log(mat, value)
+    return(fixRange(mat))
+}
