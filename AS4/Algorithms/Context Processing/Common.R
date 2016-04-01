@@ -3,7 +3,7 @@ source(paste0(getwd(), "/Algorithms/Common/Common.R"))
 
 
 bitmapMatrix <- function(bitmap, mat) {
-	dyn.load(paste0(getwd(), "C/Main.dll"))
+	dyn.load(paste0(getwd(), "C/Main.so"))
 
 	r <- bitmap$pixelMatrix$r
 	g <- bitmap$pixelMatrix$g

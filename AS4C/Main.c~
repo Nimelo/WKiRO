@@ -9,7 +9,7 @@ void bitmapMatrix(int* vRows, int* vCols, int* vector, int* maskRows, int* maskC
 int calculateCoefficientMatrix(int* vRows, int* vCols, int** matrix, int* maskRows, int* maskCols, int** mask, int x, int y);
 int isInRange(int x, int max);
 
-/*int main(int argc, char* args[]) {
+int main(int argc, char* args[]) {
 
 	int vector[100] = { 1,3,5,7,9,11,13,15,2,4,6,8,10,12,14,16};
 	int mask[] = {0,0,0,1,0,0,0,0,0 };
@@ -25,7 +25,7 @@ int isInRange(int x, int max);
 
 	bitmapMatrix(&x, &y, vector, &one, &one, mask);
 
-}*/
+}
 
 void bitmapMatrix(int* vRows, int* vCols, int* vector, int* maskRows, int* maskCols, int* mask) {
 
