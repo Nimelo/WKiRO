@@ -72,5 +72,90 @@ imgMedian <- function(img, size = 3) {
     return(img)
 }
 
+# Threshold from top
+imgThresholdTop <- function(img, threshold) {
+
+    channels <- dim(img)[3]
+
+    if (isInDimensionRange(img, 1)) {
+        img[,, 1] <- matrixThresholdTop(img[,, 1], threshold)
+    }
+
+    if (isInDimensionRange(img, 2)) {
+        img[,, 2] <- matrixThresholdTop(img[,, 2], threshold)
+    }
+
+    if (isInDimensionRange(img, 3)) {
+        img[,, 3] <- matrixThresholdTop(img[,, 3], threshold)
+    }
+
+    return(img)
+}
+
+matrixThresholdTop <- function(mat, threshold) {
+    mat <- replace(mat, mat > threshold, 1)
+    return(mat)
+}
+
+# Threshold from bottom
+imgThresholdBottom <- function(img, threshold) {
+
+    channels <- dim(img)[3]
+
+    if (isInDimensionRange(img, 1)) {
+        img[,, 1] <- matrixThresholdBottom(img[,, 1], threshold)
+    }
+
+    if (isInDimensionRange(img, 2)) {
+        img[,, 2] <- matrixThresholdBottom(img[,, 2], threshold)
+    }
+
+    if (isInDimensionRange(img, 3)) {
+        img[,, 3] <- matrixThresholdBottom(img[,, 3], threshold)
+    }
+
+    return(img)
+}
+
+matrixThresholdBottom <- function(mat, threshold) {
+    mat <- replace(mat, mat < threshold, 0)
+    return(mat)
+}
+
+# Thresholds image from top, bottom or two sides with specific threshold.
+imgThreshold <- function(img, threshold = c(0.5, 0.5), from = c("top", "bottom", "twoside")) {
+    operation = from[1]
+
+    if (operation == "top") {
+        img <- imgThresholdTop(img, threshold[1])
+    } else if (operation == "bottom") {
+        img <- imgThresholdBottom(img, threshold[1])
+    } else if (operation == "twoside") {
+        img <- imgThresholdTop(img, threshold[1])
+        img <- imgThresholdBottom(img, threshold[2])
+    }
+
+    return(img)
+}
+
+# Prewitt mask
+imgPrewitt <- function(img, threshold) {
+
+    img <- imgGreyScale(img)
+
+    b = matrix(c(-1, -1, -1, 0, 0, 0, 1, 1, 1), 3, 3, byrow = TRUE) / 6
+    c = matrix(c(-1, 0, 1, -1, 0, 1, -1, 0, 1), 3, 3, byrow = TRUE) / 6
+    Gx = abs(conv2(img[,, 1], c))
+    Gy = abs(conv2(img[,, 1], b))
+    G = sqrt(Gx ^ 2 + Gy ^ 2)
+
+    img[,, 1] = G
+    img[,, 2] = G
+    img[,,3] = G
+
+    img <- imgThresholdBottom(img, threshold)
+    return(img)
+}
 
 # TODO Laplacian Filter
+# TODO 
