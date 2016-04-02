@@ -139,7 +139,7 @@ imgThreshold <- function(img, threshold = c(0.5, 0.5), from = c("top", "bottom",
 }
 
 # Prewitt mask
-imgPrewitt <- function(img, threshold) {
+imgPrewitt <- function(img, threshold = 0.08995) {
 
     img <- imgGreyScale(img)
 
@@ -157,5 +157,37 @@ imgPrewitt <- function(img, threshold) {
     return(img)
 }
 
+# Erodation
+imgErode <- function(img, kernel = matrix(1, 3, 3), iter = 1) {
+
+    for(i in 1:iter)
+        img <- erode(img, kernel)
+    return(img)
+}
+
+# Dilatation
+imgDilate <- function(img, kernel = matrix(1, 3, 3), iter = 1) {
+
+    for (i in 1:iter)
+        img <- dilate(img, kernel)
+    return(img)
+}
+
+# Opening
+imgOpening <- function(img, kernel = matrix(1, 3, 3)) {
+
+    img <- opening(img, kernel)
+    return(img)
+}
+
+# Closening
+imgClosing <- function(img, kernel = matrix(1, 3, 3)) {
+
+    img <- closing(img, kernel)
+    return(img)
+}
+
+
 # TODO Laplacian Filter
-# TODO 
+# TODO Detector Canny
+# TODO Przekszta?cenia morfologiczne
