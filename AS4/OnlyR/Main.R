@@ -42,3 +42,48 @@ circle <- readPNG(paste0(getwd(), "/Files/Input/j.png"))
 display(circle)
 
 display(imgClosing(circle))
+
+
+field <- readPNG(paste0(getwd(), "/Files/Presentation/field.png"))
+display(field)
+
+addRField <- imgAdd(field, 0.2, 0, 0)
+display(addRField)
+
+cucumber <- readPNG(paste0(getwd(), "/Files/Presentation/cucumber.png"))
+display(cucumber)
+
+minRCucumber <- imgSubtract(cucumber, r = 0.1)
+display(cucumber)
+
+sand <- readPNG(paste0(getwd(), "/Files/Presentation/sand.png"))
+
+
+desertmountain <- readPNG(paste0(getwd(), "/Files/Presentation/desertmountain.png"))
+
+cs <- readPNG(paste0(getwd(), "/Files/Presentation/cs.png"))
+
+cf <- readPNG(paste0(getwd(), "/Files/Presentation/cf.png"))
+
+neg <- readPNG(paste0(getwd(), "/Files/Presentation/neg.png"))
+
+forest2 <- readPNG(paste0(getwd(), "/Files/Presentation/forest2.png"))
+
+forest <- readPNG(paste0(getwd(), "/Files/Presentation/forest.png"))
+
+camel <- readPNG(paste0(getwd(), "/Files/Presentation/camel.png"))
+
+view <- readPNG(paste0(getwd(), "/Files/Presentation/view.png"))
+
+gamma <- readPNG(paste0(getwd(), "/Files/Presentation/gamma.png"))
+
+snake <- readPNG(paste0(getwd(), "/Files/Presentation/snake.png"))
+
+sp1 <- readPNG(paste0(getwd(), "/Files/Presentation/sp1.png"))
+
+snake2 <- snake
+for (i in 1:100) {
+    snake2 <- imgAverage(snake2)
+}
+
+display(snake)

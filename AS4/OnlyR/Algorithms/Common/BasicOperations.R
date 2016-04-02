@@ -75,7 +75,7 @@ matrixPixelNormalize <- function(mat) {
 
 imgGammaCorrection <- function(img, gamma) {
 
-    img <- imgPower(img, 1 / gamma)
+    img <- imgPower(img, r = 1 / gamma, g = 1 / gamma, b = 1 / gamma)
     return(img)
 }
 
