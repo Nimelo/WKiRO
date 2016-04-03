@@ -51,7 +51,11 @@ imgSobelVertical <- function(img, size = 3) {
 
 # Sobel vertical and horizontal axises filter
 imgSobel <- function(img, size = 3) {
-    img <- sobelFilter(img, size, 0)
+    img_t <- sobelFilter(img[,,1], axis = 0)
+
+    img[,, 1] = img_t
+    img[,, 2] = img_t
+    img[,, 3] = img_t
 
     if (isInDimensionRange(img, 4)) {
         img[,, 4] = 1
@@ -63,7 +67,7 @@ imgSobel <- function(img, size = 3) {
 # Median filter
 imgMedian <- function(img, size = 3) {
 
-    img <- meanFilter(img, matrix(1, size, size))
+    img <- medianFilter(img, matrix(1, size, size))
 
     if (isInDimensionRange(img, 4)) {
         img[,, 4] = 1

@@ -87,3 +87,12 @@ for (i in 1:100) {
 }
 
 display(snake)
+
+
+sh <- readPNG(paste0(getwd(), "/Files/Presentation/sh.png"))
+
+wall <- readPNG(paste0(getwd(), "/Files/Presentation/wall.png"))
+
+valve <- readPNG(paste0(getwd(), "/Files/Presentation/valve.png"))
+
+spidey <- readPNG(paste0(getwd(), "/Files/Presentation/spidey.png"))
