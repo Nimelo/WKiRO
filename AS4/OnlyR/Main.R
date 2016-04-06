@@ -1,3 +1,6 @@
+install.packages('mmand')
+install.packages('png')
+
 library(mmand)
 library(png)
 
@@ -95,4 +98,13 @@ wall <- readPNG(paste0(getwd(), "/Files/Presentation/wall.png"))
 
 valve <- readPNG(paste0(getwd(), "/Files/Presentation/valve.png"))
 
+valve <- imgAdd(valve, r = 0.1, g = 0.15, b = 0.7)
+
+
+
+
 spidey <- readPNG(paste0(getwd(), "/Files/Presentation/spidey.png"))
+
+
+j <- readPNG(paste0(getwd(), "/Files/Presentation/j.png"))
+jsp <- readPNG(paste0(getwd(), "/Files/Presentation/j_salt_pepper.png"))

@@ -26,7 +26,7 @@ matrixNegative <- function(mat) {
     return(mat)
 }
 
-# Basic greyscale filter for img
+# Basic grayscale filter for img
 imgGreyScale <- function(img, r = 0.21, g = 0.71, b = 0.08) {
     img <- imgMultiply(img, r, g, b)
 
